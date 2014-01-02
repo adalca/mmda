@@ -1,0 +1,6 @@
+[submodule "src/tools/mmit"]
+	path = src/tools/mmit
+	url = https://github.com/adalca/mmit.git
+[submodule "src/tools/mgt"]
+	path = src/tools/mgt
+	url = https://github.com/adalca/mgt.git
