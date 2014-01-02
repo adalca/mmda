@@ -34,9 +34,6 @@ datasets, such as 'Site18'. the medicalDataset and strokeDataset objects support
 `clusterVolumes.m`, `linearEqualization.m` and `segmentModality.m`. Please see the documentation for `medicalDataset.m` and `strokeDataset.m`
 for information on available operations, and see `analyzeSiteMGH.m` for an example analysis pipeline.
 
-Dependencies:
--------------
-All dependencies are included as submodules. Make sure you do a recursive git clone.
 
 Contacts:
 ---------
