@@ -21,7 +21,6 @@ initAnalysis;
 [flairDst, flairOutliers] = sd.cleanFlair(files, params.wmFlairIntensity, params.wmLabels, 'exclude', exc);
 [dwiDst, dwiOutliers] = sd.cleanDwi(files, params.wmDwiIntensity, params.wmLabels, 'exclude', exc);
 outlierSubjects = union(flairOutliers, [dwiOutliers; exc]);
-includeSubjects = 
 
 %% Apply Previously learned threshold to segment the wmh
 args = {'threshold', params.mghLearnedWMHThr, 'subjectMasks', {'wmMaskInFlair'}, ...
