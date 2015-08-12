@@ -1,0 +1,1 @@
+hasStrokeInFlair = cellfun(@isfile, {sd.files.strokeInFlair});

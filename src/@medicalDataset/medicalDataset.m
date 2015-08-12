@@ -124,12 +124,16 @@ classdef medicalDataset < handle
         [subset, subsetIdx] = fileSubset(obj, requiredModalities, includeModalities);
         subsetIdx = subjectSubset(obj, varargin);
         file = getModality(obj, modality, idx);
+        nii = loadModality(obj, modality, idx);
         ism = ismodality(sd, modality);
         saveModality(obj, nii, s, modality, varargin);
+        [min, max] = modalityMinMax(obj, modality, s);
         spec = getModalitySpecs(obj, modality);
+        vol = loadVolume(md, modality, s, varargin)
+
         
         % larger operations on the medical dataset
-        allFramesMat = modality2jpg(obj, modality, outPath, varargin);
+        allFramesMat = modality2images(obj, modality, outPath, varargin);
         meas = measureModality(obj, modality, distMethod, varargin);
         meas = pairwiseMeasure(obj, modality, distMethod, nLoad, varargin);
         stats = segmentModality(obj, modFile, method, varargin);
@@ -139,9 +143,15 @@ classdef medicalDataset < handle
             labelFile, matchLabels, desiredLabelValue, overallMask, matchFunction, inSubjectSpace, varargin);
         [clusterIdx, centroidVolumes, features] = ...
             clusterVolumes(obj, clusterFeatureType, k, varargin);
+        varargout = register(sd, modalityInName, modalityOutName, regtype, configname, fixedin, varargin)
+        normalize(md, inputModality, normVal, outputModality);
+        varargout = applyfun(md, fn, mods, varargin);
+        [croppedVol, cropMask, cropArray, bBox] = ...
+                boundingBox(md, inputModality, outputModality, varargin)
+        boundingBoxCrop(sd, modalityInName, modalityOutName, varargin);
     end
     
     methods (Static)
-
+        files2folders(filepath, regex, folderpath);
     end
 end

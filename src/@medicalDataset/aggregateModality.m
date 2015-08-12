@@ -23,6 +23,7 @@ function varargout = aggregateModality(md, modalities, aggMethod, online, vararg
 %           'outNiiFile', 'db_wmh_union.nii.gz')
 %
 % TODO: clean up the mask-loading and handling
+% TODO: if no mask, should not use (mask) which vectorizes the volumes...
 %
 % Project: Analysis of clinical datasets
 % Authors: Adrian Dalca, Ramesh Sridharan
@@ -100,12 +101,14 @@ function varargout = aggregateModality(md, modalities, aggMethod, online, vararg
     % return the aggregate volume, and the full volume if there was a global mask
     varargout{1} = aggVolFinal;
     if numel(inputs.globalMaskFile) > 0
-        fullVolume = zeros(size(orignii.img));
-        fullVolume(maks) = aggVolFinal;
-        varargout{2} = fullVolume;
+        if numel(aggVolFinal) == sum(mask(:))
+            fullVolume = zeros(size(orignii.img));
+            fullVolume(mask) = aggVolFinal;
+            varargout{2} = fullVolume;
         
-        if ~isempty(inputs.outNiiFile)
-            saveNii(makeNiiLike(fullVolume, orignii), inputs.outNiiFile);
+            if ~isempty(inputs.outNiiFile)
+                saveNii(makeNiiLike(fullVolume, orignii), inputs.outNiiFile);
+            end
         end
     else
         % save to nifti file

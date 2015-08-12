@@ -10,10 +10,15 @@ function idx = ids2idx(obj, ids)
     idx = nan(numel(ids), 1);
     for i = 1:numel(ids)
         f = find(strcmp(ids{i}, obj.sids));
-        assert(numel(f) == 1, ...
-            'Found more than one match for subject id %s. Something is wrong.', ids{i});
+        if numel(f) == 0
+            warning('ids2idx: could not find subject %s', ids{i});
+            continue;
+        else
+            assert(numel(f) == 1, ...
+                'Found more than one match for subject id %s. Something is wrong.', ids{i});
+        end
         idx(i) = f;
     end
     
-    assert(~any(isnan(idx)));
+    idx(isnan(idx)) = [];
     

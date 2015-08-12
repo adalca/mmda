@@ -12,7 +12,7 @@ function saveModality(obj, nii, modality, s, varargin)
     
     % if it's not protected, but exists already, overwrite should be turned on
     if exist(file, 'file') == 2 && ~obj.overwrite
-        error('File exists, but over-write is turned off by the medical dataset object: %s', file);
+        warning('File exists, but over-write is turned off by the medical dataset object: %s', file);
     end
     
     % finally, write

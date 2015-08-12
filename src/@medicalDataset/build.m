@@ -45,6 +45,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
     if obj.nModalitySpecs > 0
         dirList = dir(subjectPath);
         subjectFolders = {dirList(:).name};
+        
         assert(strcmp(subjectFolders{1}, '.'))
         assert(strcmp(subjectFolders{2}, '..'))
         subjectIDs = subjectFolders(3:end);
@@ -102,7 +103,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
                 obj.files(i).(mods(j).modalityName) = fullName;
 
                 % make sure this file exists, else warn and tag subject. 
-                localFileExists = isfile(fullName, verbose && mods(j).isRequired);
+                localFileExists = sys.isfile(fullName, verbose && mods(j).isRequired);
                 obj.fileExists(i, j) = localFileExists;
                 elimSubjects(i) = elimSubjects(i) || (mods(j).isRequired && ~localFileExists);
             end

@@ -1,12 +1,12 @@
-function allFramesMat = modality2jpg(obj, modality, outPath, varargin)
-% MODALITY2JPG write frames from a given modality in the dataset to jpg
+function allFramesMat = modality2images(obj, modality, outPath, varargin)
+% MODALITY2IMAGES write frames from a given modality in the dataset to jpg
 %   allFramesMat = modality2jpg(obj, modality, outPath) write frames from the given modality to the
 %   outPath from the current medical dataset. outPath is a full path and filename, such as
 %       outPath = 'path/to/jpgdump/file_%s_%i.jpg'
 %   %s and %i are required, in that order. %s indicates where the frame nr will be dumped, %i where
 %   the subject id will be dumped. 
 %
-%   allFramesMat = modality2jpg(obj, modality, outPath, param1, value1) 
+%   allFramesMat = modality2images(obj, modality, outPath, param1, value1) 
 %
 %   Optional Param/Value pairs 
 %       slices - the slices to be dumped. Cannot supply padMidSlices.
@@ -23,7 +23,7 @@ function allFramesMat = modality2jpg(obj, modality, outPath, varargin)
 %               1,2,3,... (seq) or 
 %               89,90,91 (if that's the subset/slices) - index
 %
-%   See Also: nii2jpg
+%   See Also: nii2images
 %
 %   Author: Adrian Dalca
 
@@ -70,7 +70,7 @@ function allFramesMat = modality2jpg(obj, modality, outPath, varargin)
         % get the subject number
         subjNr = p.Results.subset(idx);
         
-        % prepare nii2jpg extra params.
+        % prepare nii2images extra params.
         args = cell(0); %#ok<*AGROW>
         
         % mask
@@ -98,12 +98,12 @@ function allFramesMat = modality2jpg(obj, modality, outPath, varargin)
         end
             
         % write to jpg
-        allFrames{idx} = nii2jpg(obj.files(subjNr).(modality), fname, args{:});
+        allFrames{idx} = nii2images(obj.files(subjNr).(modality), fname, args{:});
 
         % display progress
         if obj.verbose
             perc = idx/nSubjects;
-            waitbar(perc, h, sprintf('dataset2jpg: %1.3f done', perc));
+            waitbar(perc, h, sprintf('dataset2images: %1.3f done', perc));
         end
     end
     
