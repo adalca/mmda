@@ -86,7 +86,11 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
 
         % add files to files struct.
         obj.sids = cell(nSubjectIDs, 1);
-        for i = 1:nSubjectIDs
+        
+        vi = verboseIter(1:nSubjectIDs);
+        while vi.hasNext();
+            i = vi.next();
+        
             subject = subjectIDs{i};
             obj.sids{i} = subject;
 
@@ -108,6 +112,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
                 elimSubjects(i) = elimSubjects(i) || (mods(j).isRequired && ~localFileExists);
             end
         end
+        vi.close();
 
         % eliminate tagged subjects (at least one file DNE for that subject)
         subjectIDs(elimSubjects) = [];
