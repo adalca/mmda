@@ -144,7 +144,7 @@ classdef medicalDataset < handle
         [clusterIdx, centroidVolumes, features] = ...
             clusterVolumes(obj, clusterFeatureType, k, varargin);
         varargout = register(sd, modalityInName, modalityOutName, regtype, configname, fixedin, varargin)
-        normalize(md, inputModality, normVal, outputModality);
+        normalize(md, inputModality, normVal, outputModality, varargin);
         varargout = applyfun(md, fn, mods, varargin);
         [croppedVol, cropMask, cropArray, bBox] = ...
                 boundingBox(md, inputModality, outputModality, varargin)
