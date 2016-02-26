@@ -46,6 +46,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
         dirList = dir(subjectPath);
         subjectFolders = {dirList(:).name};
         
+        assert(numel(subjectFolders) > 0, 'No subjects were found');
         assert(strcmp(subjectFolders{1}, '.'))
         assert(strcmp(subjectFolders{2}, '..'))
         subjectIDs = subjectFolders(3:end);
@@ -201,7 +202,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
 
     % print timing
     if verbose
-        fprintf('sd loaded in %3.2f sec, %d subjects found\n', toc(loadtic), obj.getNumSubjects());
+        fprintf('md loaded in %3.2f sec, %d subjects found\n', toc(loadtic), obj.getNumSubjects());
     end
   
 end
