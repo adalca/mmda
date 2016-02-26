@@ -22,7 +22,15 @@ function varargout = register(sd, movingModality, fixedVol, regtype, varargin)
     
     % build optimizer for registration
     [optimizer, metric] = imregconfig(inputs.configname);
-    optimizer.GradientMagnitudeTolerance = inputs.GradientMagnitudeTolerance;
+    if strcmp(inputs.configname, 'monomodal')
+        optimizer.GradientMagnitudeTolerance = inputs.GradientMagnitudeTolerance;
+    end
+    if strcmp(inputs.configname, 'multimodal')
+%         optimizer.GrowthFactor = 1.000001;
+%         optimizer.Epsilon = optimizer.Epsilon / 100;
+        optimizer.InitialRadius = optimizer.InitialRadius / 100;
+    end
+    
     
     % load fixed volume
     if sys.isfile(fixedVol)
@@ -52,10 +60,12 @@ function varargout = register(sd, movingModality, fixedVol, regtype, varargin)
             tformFile = sd.getModality(inputs.loadtformModality, s);
             tformFileContents = load(tformFile);
             tform = tformFileContents.tform;
+            
         else
             tform = imregtform(movingVol, rMoving, fixedVol, rFixed, regtype, optimizer, metric, ...
                 'DisplayOptimization', inputs.DisplayOptimization, ...
-                'PyramidLevels', inputs.PyramidLevels); 
+                'PyramidLevels', inputs.PyramidLevels, ...
+                'InitialTransformation', affine3d()); 
         end
         
         % include the registration
@@ -99,14 +109,14 @@ function [inputs, varargin] = parseinput(varargin)
     end
     
     p = inputParser();
-    p.addParamValue('saveModality', [], @ischar);
-    p.addParamValue('savetformModality', [], @ischar);
-    p.addParamValue('loadtformModality', [], @ischar);
-    p.addParamValue('registeredVolumeInterp', 'linear', @ischar);
-    p.addParamValue('performWarp', true, @islogical); 
-    p.addParamValue('GradientMagnitudeTolerance', 1e-2, @isscalar); 
-    p.addParamValue('DisplayOptimization', true, @islogical); 
-    p.addParamValue('PyramidLevels', 4, @isscalar); 
+    p.addParameter('saveModality', [], @ischar);
+    p.addParameter('savetformModality', [], @ischar);
+    p.addParameter('loadtformModality', [], @ischar);
+    p.addParameter('registeredVolumeInterp', 'linear', @ischar);
+    p.addParameter('performWarp', true, @islogical); 
+    p.addParameter('GradientMagnitudeTolerance', 1e-2, @isscalar); 
+    p.addParameter('DisplayOptimization', false, @islogical); 
+    p.addParameter('PyramidLevels', 4, @isscalar); 
     p.KeepUnmatched = true;
     p.parse(varargin{:});
     inputs = p.Results;
