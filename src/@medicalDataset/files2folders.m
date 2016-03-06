@@ -42,7 +42,7 @@ function files2folders(srcpath, regex, dstpath)
     
     % compute the filenames and the unique file names (which will be our folders)
     fn = @(x, s, e) x(s:e);
-    fnames = cellfun(fn, {d(match).name}, regstarts(match), regends(match), 'UniformOutput', false);
+    fnames = cellfunc(fn, {d(match).name}, regstarts(match), regends(match));
     ufnames = unique(fnames);
     
     % iterate over the new folders.

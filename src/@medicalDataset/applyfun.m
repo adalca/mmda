@@ -6,7 +6,7 @@ function varargout = applyfun(md, fn, mods, varargin)
     
     % transform images to be from 0 to 1
     subset = md.subjectSubset(varargin{:});
-    vi = verboseIter(subset, true, funcname(1));
+    vi = verboseIter(subset, md.verbose, funcname(1));
 
     % go through the volumes
     varargout = cell(1, nargout);

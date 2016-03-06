@@ -15,6 +15,9 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
 %               'modalitySpecs' input.
 %               e.g. s.files(i).flair = '/initpath/SUBJ_I/preproc/padded_SUBJ_I_flair.nii.gz
 %
+% Warning: due to the cost of existance file checking, md.fileExists only checks required
+% files. All others are assumed not to exist, although they might!
+%
 %    See Also: addModality, addRequiredModality
 
 
@@ -28,7 +31,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
     end
     obj.verbose = verbose;
     mods = obj.modalitySpecs;
-    nTypes = numel(mods);
+    nTypes = numel(mods);    
 
     % ensure consistencies
     assert(obj.nFactorSpecs == 0 || ~isempty(clinicalXLSfile), ...
@@ -38,6 +41,7 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
     % prepare timer
     if verbose
         loadtic = tic;
+        warning('medicalDataset: due to runtime, fileExists is only updated for required files');
     end
 
     % get the subject IDs from the given path.
@@ -108,9 +112,11 @@ function obj = build(obj, subjectPath, clinicalXLSfile, excludeSubjects, verbose
                 obj.files(i).(mods(j).modalityName) = fullName;
 
                 % make sure this file exists, else warn and tag subject. 
-                localFileExists = sys.isfile(fullName, verbose && mods(j).isRequired);
-                obj.fileExists(i, j) = localFileExists;
-                elimSubjects(i) = elimSubjects(i) || (mods(j).isRequired && ~localFileExists);
+                if mods(j).isRequired
+                    localFileExists = sys.isfile(fullName, verbose && mods(j).isRequired);
+                    obj.fileExists(i, j) = localFileExists;
+                    elimSubjects(i) = elimSubjects(i) || (mods(j).isRequired && ~localFileExists);
+                end
             end
         end
         vi.close();

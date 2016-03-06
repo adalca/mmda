@@ -45,7 +45,7 @@ function varargout = register(sd, movingModality, fixedVol, regtype, varargin)
     
     % go through the sources
     subset = sd.subjectSubset(parseableVargs{:});
-    vi = verboseIter(subset);
+    vi = verboseIter(subset, sd.verbose);
     while vi.hasNext()
         s = vi.next();
         
